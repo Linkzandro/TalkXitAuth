@@ -1,0 +1,9 @@
+POSTGRES_USER= user
+POSTGRES_PASSWORD= password
+POSTGRES_DB= db_name
+DB_ENGINE=django.db.backends.postgresql
+DB_PORT=5432
+SECRETJWT=secretkey
+ACCESS_TIME=5
+REFRESH_TIME=10
+DEBUG=True

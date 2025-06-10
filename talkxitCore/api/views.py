@@ -1,20 +1,24 @@
-from rest_framework.generics import  CreateAPIView
+from rest_framework.generics import  CreateAPIView,ListAPIView
+from rest_framework.viewsets import ModelViewSet
 from .serializers import UserProfileCreateSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from ..models import UserProfile
 
-class CreateUserProfile(CreateAPIView):
+
+class ProfileAPIView(ModelViewSet):
     serializer_class=UserProfileCreateSerializer
-    permission_classes=[AllowAny]
-
-    def create(self, request, *args, **kwargs):
-        serializer=self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        profile=serializer.save()
-        refresh=RefreshToken.for_user(profile)
-        
-        return Response({
-            'access':str(refresh.access_token),
-            'refresh':str(refresh),
-        },status=status.HTTP_201_CREATED)
+    queryset=UserProfile.objects.all()
+    http_method_names=['get','post','patch']
+    
+    def get_object(self):
+        return self.request.user
+    def get_permissions(self):
+        if self.action=='create':
+            return [AllowAny()]
+        return super().get_permissions()
+    
+    def list(self, request, *args, **kwargs):
+        return self.retrieve(request)

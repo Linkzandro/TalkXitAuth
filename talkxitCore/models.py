@@ -7,5 +7,5 @@ class UserProfile(AbstractUser):
     name=models.CharField(max_length=144)
     surname=models.CharField(max_length=144)
     birthday=models.DateField()
-    avatar=models.ImageField()
-    REQUIRED_FIELDS=[]
+    avatar=models.ImageField(blank=True,null=True)
+    REQUIRED_FIELDS=['name','surname','birthday']
